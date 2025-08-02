@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk</title>
+  <style>
+  
+/* Reset dan dasar */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fbfd;
+  color: #333;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #faaf3e;
+  border-bottom: 1px solid #eee;
+}
+
+header h1 {
+  margin: 0;
+}
+
+nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+#popup {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f69f09;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  z-index: 9999;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 60px;
+}
+
+.back-link {
+  padding: 20px 60px 0;
+}
+
+.back-link a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.cart-items {
+  width: 65%;
+}
+
+.cart-items h2 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+.cart-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cart-header .back-link {
+  margin-top: 3px;
+}
+
+.cart-header .back-link:hover {
+  text-decoration: underline;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.item-info img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.item-details {
+  line-height: 1.5;
+}
+
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-controls input[type="number"] {
+  width: 50px;
+  padding: 6px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  color: #d33;
+}
+
+.summary {
+  background-color: #f9fbfd;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  width: 380px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+.summary h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.summary .line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.summary .total {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.summary input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.checkout-btn {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #ff9900;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #f17223;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: space-around;
+  margin: 40px 60px 0;
+  text-align: center;
+}
+
+.footer-actions div {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  flex: 1;
+  margin: 0 10px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  font-weight: 500;
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Happy Petshop</h1>
+  <nav>
+    <!-- <a href="#">Makanan</a>
+    <a href="#">Tentang kami</a> -->
+    <!-- <a href="#">Obat-obatan</a>
+    <a href="#">Perawatan</a> -->
+  </nav>
+</header>
+
+<div class="container">
+  <div class="cart-items">
+    <div class="cart-header">
+  <a href="index.html" class="back-link">&larr; Kembali</a>
+  <h2>Isi Keranjang</h2>
+    </div>
+
+    <div id="cartList"></div>
+
+    <div class="total-box">
+      <div class="total-line">
+        <span class="label">Total produk</span>
+        <span id="subtotal" class="value">0</span>
+      </div>
+      <div class="total-line total-grand">
+        <span class="label">Total</span>
+        <span id="total" class="value">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h3>Ringkasan</h3>
+    <div class="line"><span>Total produk:</span><span id="subtotal-summary">Rp 0</span></div>
+    <div class="total">Total: <span id="total-summary">Rp 0</span></div>
+    <button class="checkout-btn" onclick="kirimWhatsapp()">Lanjut Pembayaran</button>
+  </div>
+</div>
+
+
+    
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAVPQeKZvsqf1nWZeYni11KguZVT5292M4",
+    authDomain: "happy-petshop-be206.firebaseapp.com",
+    projectId: "happy-petshop-be206",
+    storageBucket: "happy-petshop-be206.appspot.com",
+    messagingSenderId: "291102292937",
+    appId: "1:291102292937:web:60987c93c7c367c6f08618"
+  };
+  
+    console.log("✅ Firebase siap");
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+
+
+auth.onAuthStateChanged(user => {
+  console.log("👤 User object:", user);
+if (!user) {
+  console.log("⛔ Belum login!");
+  return;
+}
+console.log("✅ Login sebagai:", user.uid);
+
+  const cartList = document.getElementById("cartList");
+  const subtotalEl = document.getElementById("subtotal");
+  const totalEl = document.getElementById("total");
+
+
+  if (!user) {
+    cartList.innerHTML = "<div>Silakan login untuk melihat keranjang.</div>";
+    subtotalEl.textContent = "Rp 0";
+    totalEl.textContent = "Rp 0";
+    return;
+  }
+
+  db.collection("carts").doc(user.uid).collection("items")
+    .onSnapshot(snapshot => {
+      console.log("📦 Jumlah item di cart:", snapshot.size);
+      snapshot.forEach(doc => {
+      console.log("🛒 Item:", doc.id, doc.data());
+});
+
+      if (snapshot.empty) {
+        cartList.innerHTML = "<div>Keranjang belanja kosong.</div>";
+        subtotalEl.textContent = "Rp 0";
+        totalEl.textContent = "Rp 0";
+        return;
+      }
+
+      cartList.innerHTML = "";
+      let subtotal = 0;
+
+      snapshot.forEach(doc => {
+          console.log("Item ditemukan:", doc.id, doc.data());
+
+          const item = doc.data();
+          const harga = typeof item.harga === "number" ? item.harga : parseInt(item.harga);
+          const quantity = parseInt(item.quantity);
+          const itemTotal = harga * quantity;
+          const displayName = item.nama || "Tanpa Nama";
+
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "item";
+
+        itemDiv.innerHTML = `
+          <div class="item-info">
+            <img src="${item.gambar || 'https://via.placeholder.com/60'}" alt="${displayName}">
+            <div class="item-details">
+              <strong>${displayName}</strong><br>
+              <span>Kategori: ${item.kategori || '-'}</span><br>
+              <span>Harga: Rp ${item.harga.toLocaleString('id-ID')}</span><br>
+              <span>Jumlah: ${item.quantity}</span><br>
+            </div>
+          </div>
+          <div class="item-controls">
+           
+            <button class="qty-btn" onclick="ubahJumlah('${doc.id}', -1)">−</button>
+            <span>${item.quantity}</span>
+            <button class="qty-btn" onclick="ubahJumlah('${doc.id}', 1)">+</button>
+
+            <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+            <button class="remove-btn" onclick="removeFromCart('${doc.id}')">Hapus</button>
+          </div>
+        `;
+
+        cartList.appendChild(itemDiv);
+        subtotal += itemTotal;
+      });
+
+      subtotalEl.textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+      totalEl.textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+      // ✅ Sinkronkan ke bagian Ringkasan
+      document.getElementById("subtotal-summary").textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+      document.getElementById("total-summary").textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+    });
+});
+
+
+function ubahJumlah(itemId, perubahan) {
+  auth.onAuthStateChanged(user => {
+    if (!user) return;
+    const itemRef = db.collection("carts").doc(user.uid).collection("items").doc(itemId);
+    itemRef.get().then(doc => {
+      if (doc.exists) {
+        const qty = doc.data().quantity || 1;
+        const newQty = qty + perubahan;
+        if (newQty < 1) {
+          itemRef.delete(); // jika jumlah jadi 0, hapus item
+        } else {
+          itemRef.update({ quantity: newQty });
+          window.removeFromCart = removeFromCart;
+        }
+      }
+    });
+  });
+}
+
+function removeFromCart(itemId) {
+  auth.onAuthStateChanged(user => {
+    if (!user) return;
+
+    const itemRef = db.collection("carts").doc(user.uid).collection("items").doc(itemId);
+    itemRef.delete()
+      .then(() => {
+        console.log("🗑️ Produk berhasil dihapus dari keranjang:", itemId);
+        showPopup("Produk dihapus dari keranjang.");
+      })
+      .catch(err => {
+        console.error("❌ Gagal menghapus produk:", err.message);
+        showPopup("Gagal menghapus produk.");
+      });
+  });
+}
+
+// Penting agar bisa dipanggil dari tombol HTML
+window.removeFromCart = removeFromCart;
+
+
+
+function showPopup(pesan) {
+  const popup = document.getElementById("popup");
+  popup.textContent = pesan;
+  popup.style.display = "block";
+  popup.style.opacity = "1";
+
+  setTimeout(() => {
+    popup.style.opacity = "0";
+    setTimeout(() => { popup.style.display = "none"; }, 500);
+  }, 2500); // tampil selama 2.5 detik
+}
+
+
+function kirimWhatsapp() {
+  const total = document.getElementById("total").textContent;
+  const pesan = encodeURIComponent(`Halo Admin Happy Petshop! Saya ingin melakukan pembayaran dengan total belanja sebesar ${total}. Mohon informasinya lebih lanjut.`);
+  const nomorAdmin = "6288211940710"; // Ganti dengan nomor WhatsApp admin (format internasional tanpa +)
+  const linkWA = `https://wa.me/${6288211940710}?text=${pesan}`;
+  window.open(linkWA, "_blank");
+}
+
+</script>
+
+</body>
+</html>
+
+

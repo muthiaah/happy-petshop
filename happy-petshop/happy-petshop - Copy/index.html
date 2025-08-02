@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Petshop</title>
+  <meta name="description" content="Happy Petshop - Makanan dan perlengkapan hewan peliharaan terbaik." />
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Carter+One&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+
+   h2 {
+  white-space: nowrap;        /* Supaya tidak patah baris */
+  text-align: center;         /* Tengahin */
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.hero-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: clamp(28px, 6vw, 60px);          /* Gunakan unit responsif */
+  white-space: nowrap;       /* Biar tetap satu baris */
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;   /* Jika sempit banget, beri "..." */
+}
+
+/* Optional - batas ukuran minimum supaya tidak terlalu kecil */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 16px;
+    white-space: normal;     /* Boleh patah kalau terlalu sempit */
+    text-overflow: unset;
+  }
+}
+
+.hero {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* agar full screen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  color: #000; /* Atur sesuai warna background */
+}
+
+.hero h2 {
+  font-size: clamp(28px, 6vw, 60px);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.hero-text {
+  font-size: clamp(28px, 6vw, 30px);
+  margin-bottom: 2rem;
+}
+
+.hero .btn {
+  background-color: #f4a740;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 2rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.hero .btn:hover {
+  background-color: #d98c0c;
+}
+
+
+     /* CSS produk disamakan dengan user.html */
+    .product-img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    .product-card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      background: #fff;
+      margin: 10px;
+    }
+    /* Tampilan produk seukuran */
+.grid-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 0;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 430px;
+  font-size: 1.05rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card-content {
+  margin-top: 10px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.card-content h3,
+.card-content .card-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 6px 0;
+  line-height: 1.3;
+  max-height: 2.6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-content data {
+  font-size: 1.8rem;
+  display: block;
+  margin: 6px 0;
+  color: #333;
+}
+
+.card-content .btn {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background-color: #f2aa40;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+    .popup-message {
+      position: fixed; top: 20px; right: 20px; background-color: #ff6308; color: white;
+      padding: 12px 24px; border-radius: 4px; z-index: 1000;
+    }
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
+      background-color: rgba(0,0,0,0.5); }
+    .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888;
+      width: 300px; border-radius: 10px; }
+    .close { float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+    
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fefefe;
+  color: #000000;
+}
+
+.header, .footer {
+  background-color: #faaf3e;
+  padding: 20px;
+  text-align: center;
+}
+
+.navbar-list {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding-left: 0;
+  justify-content: center;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: #444444;
+  font-weight: bold;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #ff9900;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  background: #fff;
+  margin: 10px;
+}
+
+.grid-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 0;
+}
+
+.img-cover {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.modal input {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  box-sizing: border-box;
+}
+.about-us {
+  background-color: #f9fbfd;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.about-container {
+  max-width: 800px;
+    width: 100%;       /* Perbesar lebar kontainer */
+  margin: 0 auto;         /* Agar tetap di tengah */
+  text-align: center;
+  background-color: #ffffff;
+  padding: 50px 40px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.about-container h2 {
+  font-size: clamp(24px, 5vw, 32px); 
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.about-container p {
+  font-size: clamp(14px, 2.5vw, 18px);
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+  </style>
+</head>
+<body id="top">
+
+<header class="header" data-header>
+  <div class="container">
+    <a href="#" class="logo">Happy Petshop</a>
+    <nav class="navbar">
+      <ul class="navbar-list">
+        <li class="navbar-item"><a href="#shop" class="navbar-link">Produk</a></li>
+        <li class="navbar-item"><a href="#tentang-kami" class="navbar-link">Tentang Kami</a></li>
+        <li class="navbar-item"><a href="#footer" class="navbar-link">Kontak</a></li>
+      </ul>
+      <button class="navbar-action-btn" onclick="openLoginModal()">Masuk</button>
+    </nav>
+    <div class="header-actions">
+      <button class="action-btn user" aria-label="User" id="user-btn">
+      <ion-icon name="person-outline"></ion-icon>
+      <span id="user-name"></span>
+      </button>
+      
+      <div id="user-menu" class="user-dropdown" style="display:none;">
+        <div class="user-info"><span id="user-email"></span></div>
+        <button class="logout-btn" onclick="logoutUser()">Keluar</button>
+      </div>
+      <button class="action-btn cart" aria-label="cart" onclick="window.location.href='cart coba.html'">
+        <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+        <span class="btn-badge" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section hero has-bg-image" style="background-image: url('./assets/images/background\ fix.jpg')">
+    <div class="container">
+      <h2>Selamat datang di Happy Petshop</h2>
+      <p class="hero-text">Temukan produk terbaik untuk hewan peliharaanmu</p>
+      <a href="#shop" class="btn">Belanja Sekarang</a>
+    </div>
+  </section>
+
+  <section class="section product" id="shop" aria-label="product">
+    <div class="container">
+      <h2 class="h2 section-title"><span class="span">Produk</span> Kami</h2>
+      <ul class="grid-list" id="product-list"></ul>
+    </div>
+  </section>
+
+  <section class="section service" id="tentang-kami">
+     <div class="about-container">
+    <h2>Tentang Kami</h2>
+    <p>
+      <strong>Happy Petshop</strong> adalah toko hewan terpercaya yang menyediakan berbagai kebutuhan untuk hewan peliharaan kesayangan Anda. Kami berkomitmen memberikan produk berkualitas, pelayanan ramah, dan pengalaman belanja yang menyenangkan baik secara online maupun offline.
+    </p>
+    <p>
+      Kami percaya bahwa setiap hewan pantas mendapatkan perawatan terbaik. Oleh karena itu, kami hanya menjual produk-produk dari merek ternama dan aman untuk hewan.
+    </p>
+    <p>
+      Terima kasih telah mempercayakan kebutuhan hewan peliharaan Anda kepada Happy Petshop. 🐾
+    </p>
+  </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer" style="background-image: url('./assets/images/footer-bg.jpg')">
+  <div class="container">
+    <p class="footer-text">Hubungi kami di <a href="mailto:happypetshop@gmail.com">happypetshop@gmail.com</a></p>
+    <address>Jalan Masjid Nurul Hidayah, Jakarta</address>
+    <p>&copy; 2025 Happy Petshop</p>
+  </div>
+</footer>
+
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLoginModal()">&times;</span>
+    <h2>Masuk</h2>
+    <form id="loginform">
+      <label>Email:</label><input type="email" id="login-email" required />
+      <label>Kata Sandi:</label><input type="password" id="password" required />
+      <button type="submit">Masuk</button>
+      <button type="button" onclick="openSignupModal()">Daftar</button>
+    </form>
+  </div>
+</div>
+
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSignupModal()">&times;</span>
+    <h2>Daftar</h2>
+    <form id="signupform">
+      <label>Nama:</label><input type="text" id="signup-name" required />
+      <label>Email:</label><input type="email" id="signup-email" required />
+      <label>Kata Sandi:</label><input type="password" id="signup-password" required />
+      <button type="submit">Daftar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAVPQeKZvsqf1nWZeYni11KguZVT5292M4",
+  authDomain: "happy-petshop-be206.firebaseapp.com",
+  projectId: "happy-petshop-be206",
+  storageBucket: "happy-petshop-be206.appspot.com",
+  messagingSenderId: "291102292937",
+  appId: "1:291102292937:web:60987c93c7c367c6f08618",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+function openLoginModal() { document.getElementById("loginModal").style.display = "block"; }
+function closeLoginModal() { document.getElementById("loginModal").style.display = "none"; }
+function openSignupModal() { 
+  closeLoginModal();
+  document.getElementById("signupModal").style.display = "block"; }
+function closeSignupModal() { document.getElementById("signupModal").style.display = "none"; }
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("user-name").textContent = user.email.split('@')[0];
+    document.getElementById("user-email").textContent = user.email;
+  }
+  updateCartCount();
+});
+
+document.getElementById("loginform").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => { closeLoginModal(); window.location.reload(); })
+    .catch(err => alert("Login gagal: " + err.message));
+});
+
+document.getElementById("signupform").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = document.getElementById("signup-name").value;
+  const email = document.getElementById("signup-email").value;
+  const password = document.getElementById("signup-password").value;
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(cred => db.collection("users").doc(cred.user.uid).set({ name, email }))
+    .then(() => { closeSignupModal(); window.location.reload(); })
+    .catch(err => alert("Signup gagal: " + err.message));
+});
+
+function logoutUser() {
+  auth.signOut().then(() => window.location.reload());
+}
+
+function toggleUserMenu() {
+  const menu = document.getElementById("user-menu");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function updateCartCount() {
+  const cartCount = document.getElementById("cart-count");
+  const user = auth.currentUser;
+  if (!user) {
+    cartCount.textContent = "0";
+    return;
+  }
+  db.collection("carts").doc(user.uid).collection("items").get().then(snapshot => {
+    let total = 0;
+    snapshot.forEach(doc => { total += doc.data().quantity || 1; });
+    cartCount.textContent = total;
+  });
+}
+
+function tambahkanKeKeranjang(btn) {
+  console.log("📦 Fungsi tambahkanKeKeranjang terpanggil");
+  auth.onAuthStateChanged(user => {
+    if (!user) return openLoginModal();
+    const id = btn.getAttribute("data-id");
+    const nama = btn.getAttribute("data-nama");
+    const harga = parseInt(btn.getAttribute("data-harga"));
+    const gambar = btn.getAttribute("data-gambar") || "";
+    const kategori = btn.getAttribute("data-kategori") || "";
+    const cartRef = db.collection("carts").doc(user.uid).collection("items").doc(id);
+    cartRef.get().then(doc => {
+      if (doc.exists) {
+        cartRef.update({ quantity: firebase.firestore.FieldValue.increment(1) });
+      } else {
+        cartRef.set({ nama, harga, quantity: 1, gambar, kategori });
+      }
+      showPopup(nama + " ditambahkan ke keranjang!");
+      updateCartCount();
+    });
+  });
+}
+window.tambahkanKeKeranjang = tambahkanKeKeranjang;
+
+function showPopup(message) {
+  const popup = document.createElement("div");
+  popup.className = "popup-message";
+  popup.textContent = message;
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.remove();
+  }, 3000); // popup hilang setelah 3 detik
+}
+
+
+  db.collection("products").get().then(snapshot => {
+  console.log("📦 Produk ditemukan:", snapshot.size);
+  const list = document.getElementById("product-list");
+
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="product-card">
+        <div style="width:200px;height:200px;">
+          <img src="${p.gambar}" class="product-img" />
+        </div>
+        <div class="card-content">
+          <h3>${p.nama}</h3>
+          <data>Rp ${p.harga.toLocaleString('id-ID')}</data>
+          <button class="btn" onclick="tambahkanKeKeranjang(this)"
+            data-id="${doc.id}" 
+            data-nama="${p.nama}" 
+            data-harga="${p.harga}" 
+            data-gambar="${p.gambar}" 
+            data-kategori="${p.kategori || ''}">
+            Tambahkan ke keranjang
+          </button>
+        </div>
+      </div>`;
+    list.appendChild(li);
+  });
+}).catch(err => {
+  console.error("❌ Gagal mengambil produk:", err.message);
+});
+
+  const userBtn = document.getElementById("user-btn");
+  userBtn.addEventListener("click", () => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      // Sudah login → toggle menu logout
+      toggleUserMenu();
+    } else {
+      // Belum login → buka modal login
+      openLoginModal();
+    }
+  });
+
+
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

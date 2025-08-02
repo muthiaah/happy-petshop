@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Produk</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" defer></script>
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+    .font-family-karla { font-family: karla; }
+    .bg-sidebar { background: #ff8c42; }
+    .cta-btn { color: #ff8c42; }
+    .upgrade-btn { background: #e67828; }
+    .upgrade-btn:hover { background: #cc5f1e; }
+    .active-nav-link { background: #e67828; }
+    .nav-item:hover { background: #e67828; }
+    .account-link:hover { background: #ff8c42; }
+    .group:hover .group-hover\:opacity-0 { opacity: 0; }
+    .group:hover .group-hover\:opacity-100 { opacity: 1; }
+  </style>
+</head>
+<body class="bg-gray-100 font-family-karla flex" x-data="{ tab: 'dashboard' }">
+
+  <!-- Sidebar -->
+  <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+    <div class="p-6">
+      <span class="text-white text-3xl font-semibold uppercase">Admin</span>
+    </div>
+    <nav class="text-white text-base font-semibold pt-3">
+      <button @click="tab = 'dashboard'" class="w-full text-left py-4 pl-6 nav-item" :class="tab === 'dashboard' ? 'active-nav-link' : ''">Dashboard</button>
+      <button @click="tab = 'produk'" class="w-full text-left py-4 pl-6 nav-item" :class="tab === 'produk' ? 'active-nav-link' : ''">Produk</button>
+      <button @click="tab = 'pengguna'" class="w-full text-left py-4 pl-6 nav-item" :class="tab === 'pengguna' ? 'active-nav-link' : ''">Pengguna</button>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="w-full flex flex-col h-screen overflow-y-hidden">
+    <header class="w-full items-center bg-white py-2 px-6 hidden sm:flex justify-between">
+      <span class="text-gray-800 text-lg font-semibold">Admin Panel</span>
+      <button id="logoutBtn" style="background-color: #ff8c42; color: white; padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;"
+        onmouseover="this.style.backgroundColor='#e67828'"
+        onmouseout="this.style.backgroundColor='#ff8c42'">
+        Logout
+      </button>
+    </header>
+
+    <main class="w-full flex-grow p-6 overflow-y-auto">
+      <!-- Dashboard -->
+      <section x-show="tab === 'dashboard'">
+        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-4 rounded shadow"><h3 class="text-lg font-semibold">Total Produk</h3><p id="stat-produk" class="text-2xl mt-2">0</p></div>
+          <div class="bg-white p-4 rounded shadow"><h3 class="text-lg font-semibold">Total Pengguna</h3><p id="stat-user" class="text-2xl mt-2">0</p></div>
+        </div>
+      </section>
+
+      <!-- Produk -->
+      <section x-show="tab === 'produk'">
+        <h2 class="text-2xl font-bold mb-6">Kelola Produk</h2>
+        <section class="bg-white p-6 rounded shadow-md mb-8">
+          <h2 class="text-xl font-semibold mb-4">Tambah Produk Baru</h2>
+          <form id="form-produk" class="space-y-4">
+            <input type="text" id="nama-produk" placeholder="Nama Produk" required class="w-full border p-2 rounded">
+            <input type="number" id="harga-produk" placeholder="Harga" required class="w-full border p-2 rounded">
+            <input type="file" id="gambar-produk" accept="image/*" required class="w-full border p-2 rounded">
+            <input type="file" id="gambar2-produk" accept="image/*" class="w-full border p-2 rounded">
+            <textarea id="deskripsi-produk" placeholder="Deskripsi Produk" rows="3" required class="w-full border p-2 rounded"></textarea>
+            <input type="number" id="rating-produk" placeholder="Rating (1-5)" step="0.1" min="1" max="5" required class="w-full border p-2 rounded">
+            <button type="submit" style="background-color: #ff8c42; color: white; padding: 10px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;"
+              onmouseover="this.style.backgroundColor='#e67828'"
+              onmouseout="this.style.backgroundColor='#ff8c42'">
+              Tambah Produk
+            </button>
+            <p id="form-message" class="text-green-600"></p>
+          </form>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold mb-4">Daftar Produk</h2>
+          <div id="product-list" class="grid md:grid-cols-2 gap-4"></div>
+        </section>
+      </section>
+
+      <!-- Pengguna -->
+      <section x-show="tab === 'pengguna'">
+        <h2 class="text-2xl font-bold mb-6">Daftar Pengguna</h2>
+        <div id="user-list" class="user-list max-h-96 overflow-y-auto"></div>
+      </section>
+
+      <!-- Pembayaran -->
+      <section x-show="tab === 'pembayaran'">
+        <h2 class="text-2xl font-bold mb-6">Daftar Pembayaran</h2>
+        <div id="payment-list" class="space-y-2"></div>
+      </section>
+    </main>
+
+    <footer class="w-full bg-white text-right p-4">Admin Page - Happy Petshop</footer>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVPQeKZvsqf1nWZeYni11KguZVT5292M4",
+      authDomain: "happy-petshop-be206.firebaseapp.com",
+      projectId: "happy-petshop-be206",
+      storageBucket: "happy-petshop-be206.appspot.com",
+      messagingSenderId: "291102292937",
+      appId: "1:291102292937:web:60987c93c7c367c6f08618",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    window.onload = function () {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          loadProduk();
+          loadUsers();
+          loadPayments();
+          loadStats();
+        }
+      });
+    };
+
+    async function loadProduk() {
+      const container = document.getElementById("product-list");
+      container.innerHTML = "";
+      const snapshot = await db.collection("products").get();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "border p-4 rounded shadow-sm bg-white";
+        div.innerHTML = `
+          <h3 class="text-lg font-bold">${data.nama}</h3>
+          <p class="text-sm">Harga: Rp ${data.harga.toLocaleString('id-ID')}</p>
+          <p class="text-sm">Rating: ${data.rating}</p>
+          <div class="relative w-full h-48 overflow-hidden group">
+            <img src="${data.gambar}" class="w-full h-full object-cover absolute left-0 top-0 transition-opacity duration-300 group-hover:opacity-0">
+            <img src="${data.gambar2 || data.gambar}" class="w-full h-full object-cover absolute left-0 top-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          </div>
+          <p class="text-sm mt-2">${data.deskripsi}</p>
+          <button onclick="hapusProduk('${doc.id}')" class="mt-2 bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function hapusProduk(id) {
+      if (confirm("Yakin ingin menghapus produk ini?")) {
+        db.collection("products").doc(id).delete().then(() => {
+          alert("Produk dihapus!");
+          loadProduk();
+        });
+      }
+    }
+
+    async function loadUsers() {
+      const container = document.getElementById("user-list");
+      container.innerHTML = "";
+      const snapshot = await db.collection("users").get();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "bg-white p-4 rounded shadow";
+        div.innerHTML = `<p><strong>Email:</strong> ${data.email}</p><p><strong>Role:</strong> ${data.role || 'customer'}</p>`;
+        container.appendChild(div);
+      });
+    }
+
+    async function loadPayments() {
+      const container = document.getElementById("payment-list");
+      container.innerHTML = "";
+      const snapshot = await db.collection("payments").get();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "bg-white p-4 rounded shadow";
+        div.innerHTML = `ID: ${doc.id}<br>Nama: ${data.nama}<br>Total: ${data.total}<br>Status: ${data.status}`;
+        container.appendChild(div);
+      });
+    }
+
+    async function loadStats() {
+      const produk = await db.collection("products").get();
+      const user = await db.collection("users").get();
+      document.getElementById("stat-produk").textContent = produk.size;
+      document.getElementById("stat-user").textContent = user.size;
+    }
+
+    document.getElementById("form-produk").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const nama = document.getElementById("nama-produk").value;
+      const harga = parseFloat(document.getElementById("harga-produk").value);
+      const deskripsi = document.getElementById("deskripsi-produk").value;
+      const rating = parseFloat(document.getElementById("rating-produk").value);
+      const file1 = document.getElementById("gambar-produk").files[0];
+      const file2 = document.getElementById("gambar2-produk").files[0];
+
+      const cloudName = 'dfjoyq5dn';
+      const uploadPreset = 'unsigned_preset';
+
+      const uploadToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', uploadPreset);
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, { method: 'POST', body: formData });
+        const data = await res.json();
+        return data.secure_url;
+      };
+
+      try {
+        const urlGambar1 = await uploadToCloudinary(file1);
+        let urlGambar2 = "";
+        if (file2) urlGambar2 = await uploadToCloudinary(file2);
+
+        await db.collection("products").add({ nama, harga, gambar: urlGambar1, gambar2: urlGambar2, deskripsi, rating });
+        document.getElementById("form-message").textContent = "Produk berhasil ditambahkan!";
+        document.getElementById("form-produk").reset();
+        loadProduk();
+      } catch (err) {
+        alert("Gagal tambah produk: " + err.message);
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      auth.signOut().then(() => window.location.href = "login-admin.html");
+    });
+  </script>
+</body>
+</html>
